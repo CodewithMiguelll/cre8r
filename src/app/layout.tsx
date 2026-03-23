@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display,Sora } from "next/font/google";
+import { Playfair_Display,Sora, Figtree } from "next/font/google";
 
 /*
 ------------------FONT CONFIGURATION------------------
@@ -19,6 +19,9 @@ const sora = Sora({
 });
 
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const figtree = Figtree({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: "Cre8r",
@@ -31,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", figtree.variable)}>
       <body
       suppressHydrationWarning
         className={`${playfair.variable} ${sora.variable} antialiased`}
