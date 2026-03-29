@@ -1,4 +1,5 @@
 "use client"
+import { motion } from "framer-motion";
 
 
 /*
@@ -7,15 +8,6 @@ Headings: Playfair Display Bold
 Subheadings: Playfair Display Medium
 Body: Sora
 */
-
-
-  const niches = [
-    { name: "Writers", href: "/writers" },
-    { name: "Visual Art", href: "/visual-art" },
-    { name: "Design", href: "/design" },
-    { name: "Music", href: "/music" },
-    { name: "Video", href: "/video" },
-  ];
   
 export default function Home() {
   return (
