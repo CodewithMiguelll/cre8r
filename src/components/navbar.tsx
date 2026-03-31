@@ -10,7 +10,10 @@ const Navigation = () => {
     { name: "Explore", href: "/" },
     { name: "About", href: "/about" },
     { name: "Exhibits", href: "/exhibits" },
+    /*
+    Will add Profile link once authentication has been wired in
     { name: "Profile", href: "/profile" },
+    */
   ];
   const niches = [
     { name: "Writers", href: "/writers" },

@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
+import Image from "next/image";
 
 /*
 ------------------FONT CONFIGURATION------------------
@@ -63,6 +64,69 @@ export default function Home() {
               Learn More
             </button>
           </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ABOUT CRE8R */}
+      <section className="mt-16 px-5 min-h-[70vh] flex items-center justify-center">
+        <motion.div
+          className="flex flex-col items-center gap-6 max-w-2xl"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.h2
+            className="text-4xl md:text-6xl lg:text-7xl font-playfair font-bold text-center leading-tight"
+            variants={itemVariants}
+          >
+            What is Cre8r?
+          </motion.h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-8 w-full items-center max-w-5xl">
+            <motion.div
+              variants={itemVariants}
+              className="flex flex-col justify-center"
+            >
+              <p className="text-lg md:text-xl font-sora text-pretty text-center md:text-left leading-relaxed">
+                Cre8r is a platform dedicated to showcasing the incredible
+                talents of Nigerian creatives across the globe. From artists and
+                designers to writers and innovators, we provide a space for
+                creators to share their work, connect with like-minded
+                individuals, and gain the recognition they deserve. Whether
+                you're an artist looking to exhibit your work or an enthusiast
+                seeking inspiration, Cre8r is your gateway to the vibrant world
+                of Nigerian creativity.
+              </p>
+            </motion.div>
+            <motion.div
+              variants={itemVariants}
+              className="flex items-center justify-center w-full h-full"
+            >
+              <Image
+                src="/images/tabitha-turner-lj7guVTi7GI-unsplash.jpg"
+                alt="Illustration representing Nigerian creativity"
+                width={500}
+                height={500}
+                className="rounded-lg object-cover w-full h-auto max-w-sm md:max-w-md lg:max-w-lg"
+              />
+            </motion.div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* FEATURED SECTION */}
+      <section className="mt-16 px-5 min-h-[70vh] flex items-center justify-center">
+        <motion.div
+          className="flex flex-col items-center gap-6 max-w-2xl"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.h2
+            className="text-4xl md:text-6xl lg:text-7xl font-playfair font-bold text-center leading-tight"
+            variants={itemVariants}
+          >
+            Featured Artists
+          </motion.h2>
         </motion.div>
       </section>
     </>
