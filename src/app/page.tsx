@@ -70,7 +70,7 @@ export default function Home() {
       {/* ABOUT CRE8R */}
       <section className="mt-16 px-5 min-h-[70vh] flex items-center justify-center">
         <motion.div
-          className="flex flex-col items-center gap-6 max-w-2xl"
+          className="flex flex-col items-center gap-6 w-full max-w-5xl"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -81,7 +81,10 @@ export default function Home() {
           >
             What is Cre8r?
           </motion.h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-8 w-full items-center max-w-5xl">
+          <motion.div
+            className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-8 w-full items-center"
+            variants={containerVariants}
+          >
             <motion.div
               variants={itemVariants}
               className="flex flex-col justify-center"
@@ -102,19 +105,19 @@ export default function Home() {
               className="flex items-center justify-center w-full h-full"
             >
               <Image
-                src="/images/tabitha-turner-lj7guVTi7GI-unsplash.jpg"
+                src="/images/ari-he-MamWbmmaylY-unsplash.jpg"
                 alt="Illustration representing Nigerian creativity"
                 width={500}
                 height={500}
                 className="rounded-lg object-cover w-full h-auto max-w-sm md:max-w-md lg:max-w-lg"
               />
             </motion.div>
-          </div>
+          </motion.div>
         </motion.div>
       </section>
 
       {/* FEATURED SECTION */}
-      <section className="mt-16 px-5 min-h-[70vh] flex items-center justify-center">
+      <section className="mt-14 px-5 min-h-[70vh] flex items-center justify-center">
         <motion.div
           className="flex flex-col items-center gap-6 max-w-2xl"
           variants={containerVariants}
