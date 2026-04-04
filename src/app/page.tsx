@@ -1,4 +1,5 @@
 "use client";
+import Masonry from "@/components/Masonry";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import Image from "next/image";
@@ -39,7 +40,7 @@ export default function Home() {
           className="flex flex-col items-center gap-6 max-w-2xl"
           variants={containerVariants}
           initial="hidden"
-          animate="visible"
+          whileInView="visible"
         >
           <motion.h1
             className="text-4xl md:text-6xl lg:text-7xl font-playfair font-bold text-center leading-tight"
@@ -73,7 +74,7 @@ export default function Home() {
           className="flex flex-col items-center gap-6 w-full max-w-5xl"
           variants={containerVariants}
           initial="hidden"
-          animate="visible"
+          whileInView="visible"
         >
           <motion.h2
             className="text-4xl md:text-6xl lg:text-7xl font-playfair font-bold text-center leading-tight"
@@ -122,7 +123,7 @@ export default function Home() {
           className="flex flex-col items-center gap-6 max-w-2xl"
           variants={containerVariants}
           initial="hidden"
-          animate="visible"
+          whileInView="visible"
         >
           <motion.h2
             className="text-4xl md:text-6xl lg:text-7xl font-playfair font-bold text-center leading-tight"
@@ -130,6 +131,17 @@ export default function Home() {
           >
             Featured Artists
           </motion.h2>
+
+          <motion.p
+            className="text-md md:text-lg font-sora text-center"
+            variants={itemVariants}
+          >
+            Beauty is subjective? Not on Cre8r. We feature the best of the best
+            Nigerian creatives, showcasing their work and giving them the
+            recognition they deserve. From painters and sculptors to
+            photographers and digital artists, our featured section highlights
+            the incredible talent that Nigeria has to offer.
+          </motion.p>
         </motion.div>
       </section>
     </>
