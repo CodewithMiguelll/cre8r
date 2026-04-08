@@ -11,6 +11,33 @@ Subheadings: Playfair Display Medium
 Body: Sora
 */
 
+const items = [
+  {
+    id: "1",
+    img: "https://picsum.photos/id/1015/600/900?grayscale",
+    url: "https://example.com/one",
+    height: 400,
+  },
+  {
+    id: "2",
+    img: "https://picsum.photos/id/1011/600/750?grayscale",
+    url: "https://example.com/two",
+    height: 250,
+  },
+  {
+    id: "3",
+    img: "https://picsum.photos/id/1020/600/800?grayscale",
+    url: "https://example.com/three",
+    height: 600,
+  },
+  {
+    id: "4",
+    img: "https://picsum.photos/id/1015/600/900?grayscale",
+    url: "https://example.com/one",
+    height: 400,
+  },
+];
+
 export default function Home() {
   const containerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -118,7 +145,7 @@ export default function Home() {
       </section>
 
       {/* FEATURED SECTION */}
-      <section className="mt-14 px-5 min-h-[70vh] flex items-center justify-center">
+      <section className="mt-14 px-5 flex items-center justify-center">
         <motion.div
           className="flex flex-col items-center gap-6 max-w-2xl"
           variants={containerVariants}
@@ -143,6 +170,23 @@ export default function Home() {
             the incredible talent that Nigeria has to offer.
           </motion.p>
         </motion.div>
+      </section>
+
+      {/* MASONRY GRID */}
+      <section className="mt-8 px-5 flex items-center justify-center w-full">
+        <div className="w-full">
+          <Masonry
+            items={items}
+            ease="power3.out"
+            duration={0.6}
+            stagger={0.05}
+            animateFrom="top"
+            scaleOnHover
+            hoverScale={0.95}
+            blurToFocus
+            colorShiftOnHover={false}
+          />
+        </div>
       </section>
     </>
   );
