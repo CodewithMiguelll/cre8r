@@ -21,6 +21,7 @@ const sora = Sora({
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navigation from "@/components/navbar";
+import  {Footer} from "@/components/footer";
 
 const figtree = Figtree({subsets:['latin'],variable:'--font-sans'});
 
@@ -37,11 +38,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn("font-sans", figtree.variable)}>
       <body
-      suppressHydrationWarning
+        suppressHydrationWarning
         className={`${playfair.variable} ${sora.variable} antialiased`}
       >
-        <Navigation/>
+        <Navigation />
         {children}
+        <Footer />
       </body>
     </html>
   );
