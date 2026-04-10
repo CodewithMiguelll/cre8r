@@ -164,7 +164,7 @@ export default function Home() {
       </section>
 
       {/* FEATURED SECTION */}
-      <section className="mt-14 px-5 flex items-center justify-center">
+      <section className="mt-20 px-5 flex items-center justify-center">
         <motion.div
           className="flex flex-col items-center gap-6 max-w-2xl"
           variants={containerVariants}
@@ -209,7 +209,6 @@ export default function Home() {
       </section>
 
       {/* EXHIBITS SECTION */}
-      {/* 2. UPCOMING EXHIBITS (Replaced the "meh" tiles) */}
       <section className="py-20 px-5 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end mb-12">

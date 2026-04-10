@@ -24,10 +24,10 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="w-full py-6 px-5 flex items-center justify-between">
+    <nav className="w-full py-10 px-5 flex items-center justify-between shadow-md">
       {/* Header Logo */}
       <Link href="/">
-        <h1 className="text-2xl font-playfair uppercase font-bold">Cre8r</h1>
+        <h1 className="text-2xl font-sora font-bold">cre8r</h1>
       </Link>
       <div className="hidden md:flex gap-8 items-center">
         {niches.map((niche) => (
