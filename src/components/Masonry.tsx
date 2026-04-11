@@ -14,19 +14,27 @@ const useMedia = (
   values: number[],
   defaultValue: number,
 ): number => {
-  const get = () =>
-    values[queries.findIndex((q) => matchMedia(q).matches)] ?? defaultValue;
-
-  const [value, setValue] = useState<number>(get);
+  const [value, setValue] = useState<number>(() => {
+    if (typeof window === "undefined") return defaultValue;
+    return (
+      values[queries.findIndex((q) => matchMedia(q).matches)] ?? defaultValue
+    );
+  });
 
   useEffect(() => {
-    const handler = () => setValue(get);
+    if (typeof window === "undefined") return;
+
+    const handler = () => {
+      const newValue =
+        values[queries.findIndex((q) => matchMedia(q).matches)] ?? defaultValue;
+      setValue(newValue);
+    };
     queries.forEach((q) => matchMedia(q).addEventListener("change", handler));
     return () =>
       queries.forEach((q) =>
         matchMedia(q).removeEventListener("change", handler),
       );
-  }, [queries]);
+  }, [queries, values, defaultValue]);
 
   return value;
 };

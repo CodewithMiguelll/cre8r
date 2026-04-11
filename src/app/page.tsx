@@ -3,7 +3,15 @@ import Masonry from "@/components/Masonry";
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import Image from "next/image";
-import { Calendar, MapPin, ArrowUpRight } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  ArrowUpRight,
+  Users,
+  Palette,
+  Trophy,
+  Eye,
+} from "lucide-react";
 
 /*
 ------------------FONT CONFIGURATION------------------
@@ -27,6 +35,59 @@ const liveExhibits = [
     date: "Oct 15, 2026",
     location: "Zoom / Virtual",
     type: "Virtual",
+  },
+];
+
+// Stats Data
+const stats = [
+  {
+    id: 1,
+    number: "500+",
+    label: "Nigerian Creatives",
+    icon: Users,
+  },
+  {
+    id: 2,
+    number: "2,500+",
+    label: "Artworks Featured",
+    icon: Palette,
+  },
+  {
+    id: 3,
+    number: "50+",
+    label: "Active Exhibits",
+    icon: Trophy,
+  },
+  {
+    id: 4,
+    number: "25K+",
+    label: "Monthly Visitors",
+    icon: Eye,
+  },
+];
+
+// How It Works Data
+const howItWorks = [
+  {
+    id: 1,
+    step: "01",
+    title: "Create Your Profile",
+    description:
+      "Sign up and build your creative profile showcasing your work, skills, and background.",
+  },
+  {
+    id: 2,
+    step: "02",
+    title: "Submit Your Work",
+    description:
+      "Upload your artworks, projects, or creative pieces to be featured on our platform.",
+  },
+  {
+    id: 3,
+    step: "03",
+    title: "Get Discovered",
+    description:
+      "Connect with fellow creatives, participate in exhibits, and gain recognition in the community.",
   },
 ];
 
@@ -92,7 +153,11 @@ export default function Home() {
             className="text-5xl md:text-8xl font-playfair tracking-tight font-bold text-center leading-tight"
             variants={itemVariants}
           >
-            The Home of <br /> <span className="text-gray-400 font-playfair italic font-light">Nigerian</span> Creatives
+            The Home of <br />{" "}
+            <span className="text-gray-400 font-playfair italic font-light">
+              Nigerian
+            </span>{" "}
+            Creatives
           </motion.h1>
 
           <motion.p
@@ -161,6 +226,39 @@ export default function Home() {
             </motion.div>
           </motion.div>
         </motion.div>
+      </section>
+
+      {/* STATS SECTION */}
+      <section className="mt-20 px-5 py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            className="grid grid-cols-2 md:grid-cols-4 gap-8"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+          >
+            {stats.map((stat) => {
+              const IconComponent = stat.icon;
+              return (
+                <motion.div
+                  key={stat.id}
+                  className="flex flex-col items-center text-center"
+                  variants={itemVariants}
+                >
+                  <div className="p-4 bg-black text-white rounded-full mb-4">
+                    <IconComponent size={32} />
+                  </div>
+                  <h3 className="text-3xl md:text-4xl font-playfair font-bold mb-2">
+                    {stat.number}
+                  </h3>
+                  <p className="text-gray-600 font-sora text-sm md:text-base">
+                    {stat.label}
+                  </p>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </div>
       </section>
 
       {/* FEATURED SECTION */}
@@ -254,6 +352,136 @@ export default function Home() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* HOW IT WORKS SECTION */}
+      <section className="py-20 px-5">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            className="text-center mb-16"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+          >
+            <motion.h2
+              className="text-4xl md:text-6xl font-playfair font-bold mb-6"
+              variants={itemVariants}
+            >
+              How It Works
+            </motion.h2>
+            <motion.p
+              className="text-lg md:text-xl font-sora text-gray-600 max-w-3xl mx-auto"
+              variants={itemVariants}
+            >
+              Join the vibrant community of Nigerian creatives in three simple
+              steps
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+          >
+            {howItWorks.map((step) => (
+              <motion.div
+                key={step.id}
+                className="text-center group"
+                variants={itemVariants}
+              >
+                <div className="relative mb-8">
+                  <div className="w-20 h-20 bg-black text-white rounded-full flex items-center justify-center text-2xl font-playfair font-bold mx-auto mb-4 group-hover:scale-110 transition-transform">
+                    {step.step}
+                  </div>
+                  {step.id < howItWorks.length && (
+                    <div className="hidden md:block absolute top-10 left-full w-full h-0.5 bg-gray-300 -translate-x-10"></div>
+                  )}
+                </div>
+                <h3 className="text-2xl font-playfair font-bold mb-4">
+                  {step.title}
+                </h3>
+                <p className="text-gray-600 font-sora leading-relaxed">
+                  {step.description}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* NEWSLETTER SECTION */}
+      <section className="py-20 px-5 bg-black text-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+          >
+            <motion.h2
+              className="text-4xl md:text-6xl font-playfair font-bold mb-6"
+              variants={itemVariants}
+            >
+              Stay Connected
+            </motion.h2>
+            <motion.p
+              className="text-lg md:text-xl font-sora text-gray-300 mb-8 max-w-2xl mx-auto"
+              variants={itemVariants}
+            >
+              Get the latest updates on new exhibits, featured creators, and
+              creative opportunities delivered to your inbox.
+            </motion.p>
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
+              variants={itemVariants}
+            >
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 px-6 py-3 rounded-lg text-black font-sora focus:outline-none focus:ring-2 focus:ring-white"
+              />
+              <button className="px-8 py-3 bg-white text-black rounded-lg font-sora font-semibold hover:bg-gray-100 transition-colors">
+                Subscribe
+              </button>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CALL TO ACTION */}
+      <section className="mt-20 px-5 py-20 flex items-center justify-center">
+        <motion.div
+          className="flex flex-col items-center gap-8 max-w-4xl text-center"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+        >
+          <motion.h2
+            className="text-4xl md:text-7xl font-playfair font-bold leading-tight"
+            variants={itemVariants}
+          >
+            Ready to Showcase Your Talent?
+          </motion.h2>
+          <motion.p
+            className="text-lg md:text-xl font-sora text-gray-600 max-w-2xl leading-relaxed"
+            variants={itemVariants}
+          >
+            Join thousands of Nigerian creatives who are already making their
+            mark. Whether you're an artist, designer, writer, or innovator,
+            Cre8r is your platform to shine and connect with a global audience.
+          </motion.p>
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 mt-6"
+            variants={itemVariants}
+          >
+            <button className="px-10 py-4 bg-black text-white rounded-lg font-sora font-semibold text-lg hover:bg-gray-800 transition-colors">
+              Join as Creator
+            </button>
+            <button className="px-10 py-4 border-2 border-black text-black rounded-lg font-sora font-semibold text-lg hover:bg-black hover:text-white transition-colors">
+              Explore Gallery
+            </button>
+          </motion.div>
+        </motion.div>
       </section>
     </>
   );
