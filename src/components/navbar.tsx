@@ -1,19 +1,21 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { X, Menu } from "lucide-react";
+import { useUser } from "@/lib/use-user";
+import { createClient } from "@/lib/supabase";
 
 const Navigation = () => {
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, loading } = useUser();
   const links = [
-    { name: "Explore", href: "/" },
+    { name: "Explore", href: "/#creators" },
     { name: "About", href: "/about" },
     { name: "Exhibits", href: "/exhibits" },
-    /*
-    Will add Profile link once authentication has been wired in
     { name: "Profile", href: "/profile" },
-    */
   ];
   const niches = [
     { name: "Writers", href: "/writers" },
@@ -23,17 +25,27 @@ const Navigation = () => {
     { name: "Video", href: "/video" },
   ];
 
+  const handleNicheClick = (e: React.MouseEvent, href: string) => {
+    if (!user) {
+      e.preventDefault();
+      router.push("/auth");
+    } else {
+      router.push(href);
+    }
+  };
+
   return (
-    <nav className="w-full py-6 px-5 flex items-center justify-between">
+    <nav className="w-full py-10 px-5 flex items-center justify-between shadow-md">
       {/* Header Logo */}
       <Link href="/">
-        <h1 className="text-2xl font-playfair uppercase font-bold">Cre8r</h1>
+        <h1 className="text-2xl font-sora font-bold">cre8r</h1>
       </Link>
       <div className="hidden md:flex gap-8 items-center">
         {niches.map((niche) => (
           <a
             key={niche.href}
             href={niche.href}
+            onClick={(e) => handleNicheClick(e, niche.href)}
             className="hover:opacity-70 transition-opacity font-sora"
           >
             {niche.name}
@@ -42,15 +54,43 @@ const Navigation = () => {
       </div>
 
       <div className="hidden md:flex gap-8 items-center">
-        {links.map((link) => (
-          <a
-            key={link.href}
-            href={link.href}
-            className="hover:opacity-70 transition-opacity font-sora"
-          >
-            {link.name}
-          </a>
-        ))}
+        {user &&
+          links.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="hover:opacity-70 transition-opacity font-sora"
+            >
+              {link.name}
+            </a>
+          ))}
+        {!loading &&
+          (user ? (
+            <button
+              onClick={async () => {
+                const supabase = createClient;
+                await supabase.auth.signOut();
+              }}
+              className="bg-black text-white hover:opacity-70 transition-opacity font-sora p-2.5 rounded-lg"
+            >
+              Logout
+            </button>
+          ) : (
+            <>
+              <Link
+                href="/auth?form=login"
+                className="hover:opacity-70 transition-opacity font-sora bg-black p-2.5 text-white rounded-lg"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/auth?form=signup"
+                className="hover:opacity-70 transition-opacity font-sora p-2 rounded-lg border border-black"
+              >
+                Create Account
+              </Link>
+            </>
+          ))}
       </div>
 
       {/* Mobile Menu Button */}
@@ -89,20 +129,54 @@ const Navigation = () => {
             {/* Menu Content */}
             <div className="pt-16 px-6 space-y-6">
               {/* Links Section */}
+              {user && (
+                <div className="space-y-4">
+                  <p className="text-gray-400 text-sm uppercase font-semibold">
+                    Navigation
+                  </p>
+                  {links.map((link) => (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      className="block font-sora"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {link.name}
+                    </a>
+                  ))}
+                </div>
+              )}
               <div className="space-y-4">
-                <p className="text-gray-400 text-sm uppercase font-semibold">
-                  Navigation
-                </p>
-                {links.map((link) => (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    className="block font-sora"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {link.name}
-                  </a>
-                ))}
+                {!loading &&
+                  (user ? (
+                    <button
+                      onClick={async () => {
+                        const supabase = createClient;
+                        await supabase.auth.signOut();
+                        setIsMenuOpen(false);
+                      }}
+                      className="block font-sora text-left"
+                    >
+                      Logout
+                    </button>
+                  ) : (
+                    <>
+                      <Link
+                        href="/auth?form=login"
+                        className="block font-sora bg-black p-2.5 text-white rounded-xl"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Sign In
+                      </Link>
+                      <Link
+                        href="/auth?form=signup"
+                        className="block font-sora"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Create Account
+                      </Link>
+                    </>
+                  ))}
               </div>
 
               {/* Niches Section */}
@@ -114,8 +188,11 @@ const Navigation = () => {
                   <a
                     key={niche.href}
                     href={niche.href}
+                    onClick={(e) => {
+                      handleNicheClick(e, niche.href);
+                      setIsMenuOpen(false);
+                    }}
                     className="block font-sora"
-                    onClick={() => setIsMenuOpen(false)}
                   >
                     {niche.name}
                   </a>
