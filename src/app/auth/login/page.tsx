@@ -1,22 +1,21 @@
 import Link from "next/link";
+import { LoginForm } from "@/components/auth/login-form";
 import { Button } from "@/components/ui/button";
 
-export default function AuthPage() {
+export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="max-w-md w-full space-y-8 p-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Welcome to Cre8r
+            Sign in to Cre8r
           </h2>
-          <p className="mt-2 text-center text-gray-600">
-            Get started by choosing an option below
-          </p>
         </div>
-        <div className="flex flex-col space-y-4">
-          <Link href="/auth/login" className="w-full">
-            <Button className="w-full">Log In</Button>
-          </Link>
+        <LoginForm />
+        <div className="flex flex-col space-y-3">
+          <p className="text-center text-sm text-gray-600">
+            Don't have an account?
+          </p>
           <Link href="/auth/signup" className="w-full">
             <Button variant="outline" className="w-full">
               Create Account
