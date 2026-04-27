@@ -296,7 +296,7 @@ export default function Home() {
       </section>
 
       {/* MASONRY GRID */}
-      <section id="creators" className="mt-8 px-5 flex items-center justify-center w-full">
+      <section className="mt-8 px-5 flex items-center justify-center w-full">
         <div className="w-full">
           <Masonry
             items={items}
