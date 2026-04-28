@@ -12,7 +12,7 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, loading } = useUser();
   const links = [
-    { name: "Explore", href: "/#creators" },
+    { name: "Explore", href: "/explore" },
     { name: "About", href: "/about" },
     { name: "Exhibits", href: "/exhibits" },
     { name: "Profile", href: "/profile" },

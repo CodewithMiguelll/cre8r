@@ -102,12 +102,12 @@ const items = [
     id: "2",
     img: "/images/adura-hair-chains.jpg",
     url: "https://example.com/two",
-    height: 250,
+    height: 350,
   },
   {
     id: "3",
     img: "/images/adura-mother-nature.jpg",
-    url: "https://example.com/three",
+    url: "https://x.com/AduraTheArtist",
     height: 600,
   },
   {
@@ -115,6 +115,12 @@ const items = [
     img: "https://picsum.photos/id/1015/600/900?grayscale",
     url: "https://example.com/one",
     height: 400,
+  },
+  {
+    id: "5",
+    img: "/images/rotr-book-cover-cinematic-variant-2.jpg",
+    url: "https://www.wattpad.com/story/407399764?utm_source=android&utm_medium=link&utm_content=share_writing&wp_page=create&wp_uname=Chikaimaaa_",
+    height: 800,
   },
 ];
 
@@ -290,7 +296,7 @@ export default function Home() {
       </section>
 
       {/* MASONRY GRID */}
-      <section id="creators" className="mt-8 px-5 flex items-center justify-center w-full">
+      <section className="mt-8 px-5 flex items-center justify-center w-full">
         <div className="w-full">
           <Masonry
             items={items}
