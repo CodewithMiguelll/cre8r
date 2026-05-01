@@ -192,3 +192,125 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE OR REPLACE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- ============================================================
+-- NICHE PIECES SYSTEM (Writing, Photography, Music, Art, Design)
+-- ============================================================
+
+-- Niche categories lookup table
+CREATE TABLE IF NOT EXISTS public.niche_categories (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  niche TEXT NOT NULL,
+  name TEXT NOT NULL,
+  slug TEXT NOT NULL,
+  description TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+  UNIQUE(niche, slug)
+);
+
+-- Pieces table (all niche content)
+CREATE TABLE IF NOT EXISTS public.pieces (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  niche TEXT NOT NULL,
+  category TEXT,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  excerpt TEXT,
+  cover_image TEXT,
+  tags TEXT[],
+  is_published BOOLEAN DEFAULT false,
+  view_count INTEGER DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- Piece likes table
+CREATE TABLE IF NOT EXISTS public.piece_likes (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  piece_id UUID REFERENCES public.pieces(id) ON DELETE CASCADE NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+  UNIQUE(user_id, piece_id)
+);
+
+-- Piece comments table
+CREATE TABLE IF NOT EXISTS public.piece_comments (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  piece_id UUID REFERENCES public.pieces(id) ON DELETE CASCADE NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
+);
+
+-- Enable RLS on niche tables
+ALTER TABLE public.niche_categories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.pieces ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.piece_likes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.piece_comments ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies for niche_categories
+CREATE POLICY "Categories are viewable by everyone" ON public.niche_categories
+  FOR SELECT USING (true);
+
+-- RLS Policies for pieces
+CREATE POLICY "Published pieces are viewable by everyone" ON public.pieces
+  FOR SELECT USING (is_published = true);
+
+CREATE POLICY "Users can view their own pieces" ON public.pieces
+  FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can create pieces" ON public.pieces
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their own pieces" ON public.pieces
+  FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own pieces" ON public.pieces
+  FOR DELETE USING (auth.uid() = user_id);
+
+-- RLS Policies for piece_likes
+CREATE POLICY "Piece likes are viewable by everyone" ON public.piece_likes
+  FOR SELECT USING (true);
+
+CREATE POLICY "Users can like pieces" ON public.piece_likes
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can unlike pieces" ON public.piece_likes
+  FOR DELETE USING (auth.uid() = user_id);
+
+-- RLS Policies for piece_comments
+CREATE POLICY "Comments on published pieces are viewable" ON public.piece_comments
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.pieces 
+      WHERE pieces.id = piece_comments.piece_id AND pieces.is_published = true
+    )
+  );
+
+CREATE POLICY "Users can view comments on their pieces" ON public.piece_comments
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.pieces 
+      WHERE pieces.id = piece_comments.piece_id AND pieces.user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "Users can create piece comments" ON public.piece_comments
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their own piece comments" ON public.piece_comments
+  FOR UPDATE USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own piece comments" ON public.piece_comments
+  FOR DELETE USING (auth.uid() = user_id);
+
+-- Indexes for performance
+CREATE INDEX idx_pieces_niche ON public.pieces(niche);
+CREATE INDEX idx_pieces_user_id ON public.pieces(user_id);
+CREATE INDEX idx_pieces_is_published ON public.pieces(is_published);
+CREATE INDEX idx_pieces_created_at ON public.pieces(created_at DESC);
+CREATE INDEX idx_piece_likes_piece_id ON public.piece_likes(piece_id);
+CREATE INDEX idx_piece_comments_piece_id ON public.piece_comments(piece_id);
+CREATE INDEX idx_niche_categories_niche ON public.niche_categories(niche);
