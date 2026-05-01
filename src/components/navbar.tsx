@@ -18,11 +18,11 @@ const Navigation = () => {
     { name: "Profile", href: "/profile" },
   ];
   const niches = [
-    { name: "Writers", href: "/niches/writers" },
-    { name: "Visual Art", href: "/niches/visual-art" },
+    { name: "Writing", href: "/niches/writing" },
+    { name: "Photography", href: "/niches/photography" },
+    { name: "Music", href: "/niches/music" },
+    { name: "Art", href: "/niches/art" },
     { name: "Design", href: "/niches/design" },
-    { name: "Music", href: "/niches/music" }, 
-    { name: "Video", href: "/niches/video" },
   ];
 
   const handleNicheClick = (e: React.MouseEvent, href: string) => {
