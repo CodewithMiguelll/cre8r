@@ -1,134 +1,124 @@
-import { useCallback, useEffect, useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase";
-import { PieceComment, PieceCommentWithAuthor } from "@/lib/types";
+import { PieceCommentWithAuthor } from "@/lib/types";
 
 export function usePieceComments(pieceId: string) {
-  const [comments, setComments] = useState<PieceCommentWithAuthor[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const supabase = createClient();
 
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        setLoading(true);
-        const supabase = createClient();
+  const { data: comments = [], isLoading } = useQuery({
+    queryKey: ["piece_comments", pieceId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("piece_comments")
+        .select(
+          `
+          *,
+          author:profiles(*)
+        `,
+        )
+        .eq("piece_id", pieceId)
+        .order("created_at", { ascending: true });
 
-        const { data, error: fetchError } = await supabase
-          .from("piece_comments")
-          .select(
-            `
-            *,
-            author:profiles(*)
-          `,
-          )
-          .eq("piece_id", pieceId)
-          .order("created_at", { ascending: true });
-
-        if (fetchError) throw fetchError;
-        setComments(data || []);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to fetch comments",
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchComments();
-  }, [pieceId]);
-
-  const addComment = useCallback(
-    async (userId: string, content: string) => {
-      try {
-        const supabase = createClient();
-
-        const { data, error: insertError } = await supabase
-          .from("piece_comments")
-          .insert({
-            piece_id: pieceId,
-            user_id: userId,
-            content,
-          })
-          .select(
-            `
-            *,
-            author:profiles(*)
-          `,
-          )
-          .single();
-
-        if (insertError) throw insertError;
-
-        setComments((prev) => [...prev, data]);
-        return data;
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to add comment");
-        throw err;
-      }
+      if (error) throw error;
+      return data || [];
     },
-    [pieceId],
-  );
+  });
 
-  const updateComment = useCallback(
-    async (commentId: string, content: string) => {
-      try {
-        const supabase = createClient();
+  const addCommentMutation = useMutation({
+    mutationFn: async ({
+      userId,
+      content,
+    }: {
+      userId: string;
+      content: string;
+    }) => {
+      const { data, error } = await supabase
+        .from("piece_comments")
+        .insert({
+          piece_id: pieceId,
+          user_id: userId,
+          content,
+        })
+        .select(
+          `
+          *,
+          author:profiles(*)
+        `,
+        )
+        .single();
 
-        const { data, error: updateError } = await supabase
-          .from("piece_comments")
-          .update({ content, updated_at: new Date().toISOString() })
-          .eq("id", commentId)
-          .select(
-            `
-            *,
-            author:profiles(*)
-          `,
-          )
-          .single();
-
-        if (updateError) throw updateError;
-
-        setComments((prev) =>
-          prev.map((comment) =>
-            comment.id === commentId ? { ...comment, ...data } : comment,
-          ),
-        );
-        return data;
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to update comment",
-        );
-        throw err;
-      }
+      if (error) throw error;
+      return data;
     },
-    [],
-  );
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["piece_comments", pieceId],
+      });
+    },
+  });
 
-  const deleteComment = useCallback(async (commentId: string) => {
-    try {
-      const supabase = createClient();
+  const updateCommentMutation = useMutation({
+    mutationFn: async ({
+      commentId,
+      content,
+    }: {
+      commentId: string;
+      content: string;
+    }) => {
+      const { data, error } = await supabase
+        .from("piece_comments")
+        .update({ content, updated_at: new Date().toISOString() })
+        .eq("id", commentId)
+        .select(
+          `
+          *,
+          author:profiles(*)
+        `,
+        )
+        .single();
 
-      const { error: deleteError } = await supabase
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["piece_comments", pieceId],
+      });
+    },
+  });
+
+  const deleteCommentMutation = useMutation({
+    mutationFn: async (commentId: string) => {
+      const { error } = await supabase
         .from("piece_comments")
         .delete()
         .eq("id", commentId);
 
-      if (deleteError) throw deleteError;
-
-      setComments((prev) => prev.filter((comment) => comment.id !== commentId));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to delete comment");
-      throw err;
-    }
-  }, []);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["piece_comments", pieceId],
+      });
+    },
+  });
 
   return {
     comments,
-    loading,
-    error,
-    addComment,
-    updateComment,
-    deleteComment,
+    loading: isLoading,
+    error:
+      addCommentMutation.error ||
+      updateCommentMutation.error ||
+      deleteCommentMutation.error,
+    addComment: (userId: string, content: string) =>
+      addCommentMutation.mutate({ userId, content }),
+    isAddingComment: addCommentMutation.isPending,
+    updateComment: (commentId: string, content: string) =>
+      updateCommentMutation.mutate({ commentId, content }),
+    isUpdatingComment: updateCommentMutation.isPending,
+    deleteComment: (commentId: string) =>
+      deleteCommentMutation.mutate(commentId),
+    isDeletingComment: deleteCommentMutation.isPending,
   };
 }

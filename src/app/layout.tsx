@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display,Sora, Figtree } from "next/font/google";
+import { Playfair_Display, Sora, Figtree } from "next/font/google";
 
 /*
 ------------------FONT CONFIGURATION------------------
@@ -21,9 +21,10 @@ const sora = Sora({
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Navigation from "@/components/navbar";
-import  {Footer} from "@/components/footer";
+import { Footer } from "@/components/footer";
+import { QueryProvider } from "@/lib/query-provider";
 
-const figtree = Figtree({subsets:['latin'],variable:'--font-sans'});
+const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "Cre8r",
@@ -41,9 +42,11 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${playfair.variable} ${sora.variable} antialiased`}
       >
-        <Navigation />
-        {children}
-        <Footer />
+        <QueryProvider>
+          <Navigation />
+          {children}
+          <Footer />
+        </QueryProvider>
       </body>
     </html>
   );

@@ -1,88 +1,59 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase";
 import { Piece, PieceWithAuthor, Niche } from "@/lib/types";
 
 export function usePieces(niche: Niche, category?: string) {
-  const [pieces, setPieces] = useState<PieceWithAuthor[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  return useQuery({
+    queryKey: ["pieces", niche, category],
+    queryFn: async () => {
+      const supabase = createClient();
 
-  useEffect(() => {
-    const fetchPieces = async () => {
-      try {
-        setLoading(true);
-        const supabase = createClient();
+      let query = supabase
+        .from("pieces")
+        .select(
+          `
+          *,
+          author:profiles(*)
+        `,
+        )
+        .eq("niche", niche)
+        .eq("is_published", true)
+        .order("created_at", { ascending: false });
 
-        let query = supabase
-          .from("pieces")
-          .select(
-            `
-            *,
-            author:profiles(*)
-          `,
-          )
-          .eq("niche", niche)
-          .eq("is_published", true)
-          .order("created_at", { ascending: false });
-
-        if (category) {
-          query = query.eq("category", category);
-        }
-
-        const { data, error: fetchError } = await query;
-
-        if (fetchError) throw fetchError;
-        setPieces(data || []);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch pieces");
-      } finally {
-        setLoading(false);
+      if (category) {
+        query = query.eq("category", category);
       }
-    };
 
-    fetchPieces();
-  }, [niche, category]);
+      const { data, error } = await query;
 
-  return { pieces, loading, error };
+      if (error) throw error;
+      return data || [];
+    },
+  });
 }
 
 export function usePiecesByUser(userId: string) {
-  const [pieces, setPieces] = useState<PieceWithAuthor[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  return useQuery({
+    queryKey: ["pieces", "user", userId],
+    queryFn: async () => {
+      const supabase = createClient();
 
-  useEffect(() => {
-    const fetchPieces = async () => {
-      try {
-        setLoading(true);
-        const supabase = createClient();
+      const { data, error } = await supabase
+        .from("pieces")
+        .select(
+          `
+          *,
+          author:profiles(*)
+        `,
+        )
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
 
-        const { data, error: fetchError } = await supabase
-          .from("pieces")
-          .select(
-            `
-            *,
-            author:profiles(*)
-          `,
-          )
-          .eq("user_id", userId)
-          .order("created_at", { ascending: false });
-
-        if (fetchError) throw fetchError;
-        setPieces(data || []);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch pieces");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (userId) {
-      fetchPieces();
-    }
-  }, [userId]);
-
-  return { pieces, loading, error };
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!userId,
+  });
 }
 
 export async function fetchPieceDetail(pieceId: string) {
