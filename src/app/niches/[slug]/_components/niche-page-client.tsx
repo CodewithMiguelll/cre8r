@@ -124,9 +124,9 @@ export function NichePageClient({ niche }: NichePageClientProps) {
 
           {/* Write/Submit CTA */}
           <Link href={`/niches/${niche}/write`} className="flex-1 sm:flex-none">
-            <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors w-full sm:w-auto justify-center">
+            <button className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors w-full sm:w-auto justify-center">
               <Plus className="w-4 h-4" />
-              <span className="text-sm font-medium">Write</span>
+              <span className="text-sm font-medium">Create</span>
             </button>
           </Link>
         </div>
