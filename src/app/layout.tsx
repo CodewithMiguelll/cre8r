@@ -26,9 +26,81 @@ import { QueryProvider } from "@/lib/query-provider";
 
 const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://cre8r.pxxl.click";
+
 export const metadata: Metadata = {
-  title: "Cre8r",
-  description: "The home for Nigerian creatives.",
+  title: {
+    default: "Cre8r | The Home for Nigerian Creatives",
+    template: "%s | Cre8r",
+  },
+  description:
+    "Discover and showcase Nigerian creative talents. A platform for artists, designers, photographers, and creative professionals.",
+  keywords: [
+    "Nigerian creatives",
+    "African artists",
+    "creative portfolio",
+    "design platform",
+    "Nigerian designers",
+    "creative community",
+  ],
+  authors: [{ name: "Cre8r" }],
+  creator: "Cre8r",
+  publisher: "Cre8r",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  metadataBase: new URL(baseUrl),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    url: "/",
+    title: "Cre8r | The Home for Nigerian Creatives",
+    description:
+      "Discover and showcase Nigerian creative talents. A platform for artists, designers, photographers, and creative professionals.",
+    siteName: "Cre8r",
+    images: [
+      {
+        url: "/images/Cre8r-og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Cre8r - The home for Nigerian creatives",
+        type: "image/png",
+      },
+    ],
+    locale: "en_NG",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Cre8r | The Home for Nigerian Creatives",
+    description:
+      "Discover and showcase Nigerian creative talents. A platform for artists, designers, photographers, and creative professionals.",
+    images: ["/images/Cre8r-og-image.png"],
+    creator: "@Chikaimaaa",
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+  },
+  formatDetection: {
+    telephone: false,
+    email: false,
+    address: false,
+  },
 };
 
 export default function RootLayout({
