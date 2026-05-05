@@ -123,7 +123,7 @@ export function NichePageClient({ niche }: NichePageClientProps) {
           </button>
 
           {/* Write/Submit CTA */}
-          <Link href={`/niches/${niche}/write`} className="flex-1 sm:flex-none">
+          <Link href={`/niches/${niche}/create`} className="flex-1 sm:flex-none">
             <button className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors w-full sm:w-auto justify-center">
               <Plus className="w-4 h-4" />
               <span className="text-sm font-medium">Create</span>

@@ -13,11 +13,6 @@ const NICHES = {
     description: "Visual storytelling through images",
     slug: "photography",
   },
-  music: {
-    title: "Music",
-    description: "Create and share original music",
-    slug: "music",
-  },
   art: {
     title: "Art",
     description: "Digital and traditional artwork",

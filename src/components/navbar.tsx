@@ -17,10 +17,10 @@ const Navigation = () => {
     { name: "Exhibits", href: "/exhibits" },
     { name: "Profile", href: "/profile" },
   ];
+  const createLink = { name: "Create", href: "/create" };
   const niches = [
     { name: "Writing", href: "/niches/writing" },
     { name: "Photography", href: "/niches/photography" },
-    { name: "Music", href: "/niches/music" },
     { name: "Art", href: "/niches/art" },
     { name: "Design", href: "/niches/design" },
   ];
@@ -64,6 +64,14 @@ const Navigation = () => {
               {link.name}
             </a>
           ))}
+        {user && (
+          <Link
+            href={createLink.href}
+            className="bg-blue-600 text-white hover:bg-blue-700 transition-colors font-sora p-2.5 rounded-lg"
+          >
+            {createLink.name}
+          </Link>
+        )}
         {!loading &&
           (user ? (
             <button
@@ -144,6 +152,13 @@ const Navigation = () => {
                       {link.name}
                     </a>
                   ))}
+                  <Link
+                    href={createLink.href}
+                    className="block font-sora bg-blue-600 text-white p-2.5 rounded-lg hover:bg-blue-700"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {createLink.name}
+                  </Link>
                 </div>
               )}
               <div className="space-y-4">

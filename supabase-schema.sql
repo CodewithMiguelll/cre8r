@@ -71,6 +71,24 @@ CREATE POLICY "Users can update their own images" ON storage.objects
 CREATE POLICY "Users can delete their own images" ON storage.objects
   FOR DELETE USING (bucket_id = 'images' AND auth.uid()::text = (storage.foldername(name))[1]);
 
+-- Create storage bucket for pieces (user-generated content)
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('pieces', 'pieces', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Storage policies for pieces
+CREATE POLICY "Pieces are publicly accessible" ON storage.objects
+  FOR SELECT USING (bucket_id = 'pieces');
+
+CREATE POLICY "Users can upload pieces" ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'pieces' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "Users can update their own pieces" ON storage.objects
+  FOR UPDATE USING (bucket_id = 'pieces' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "Users can delete their own pieces" ON storage.objects
+  FOR DELETE USING (bucket_id = 'pieces' AND auth.uid()::text = (storage.foldername(name))[1]);
+
 -- Create follows table
 CREATE TABLE IF NOT EXISTS public.follows (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -194,7 +212,7 @@ CREATE OR REPLACE TRIGGER on_auth_user_created
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- ============================================================
--- NICHE PIECES SYSTEM (Writing, Photography, Music, Art, Design)
+-- NICHE PIECES SYSTEM (Writing, Photography, Art, Design)
 -- ============================================================
 
 -- Niche categories lookup table
