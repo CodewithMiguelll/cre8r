@@ -444,7 +444,7 @@ export default function Home() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-6 py-3 rounded-lg text-black font-sora focus:outline-none focus:ring-2 focus:ring-white"
+                className="flex-1 px-6 py-3 rounded-lg text-black font-sora focus:outline-none focus:ring-2 focus:ring-slate-600 bg-white"
               />
               <button className="px-8 py-3 bg-white text-black rounded-lg font-sora font-semibold hover:bg-gray-100 transition-colors">
                 Subscribe

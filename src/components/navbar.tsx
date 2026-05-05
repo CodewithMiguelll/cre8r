@@ -17,12 +17,12 @@ const Navigation = () => {
     { name: "Exhibits", href: "/exhibits" },
     { name: "Profile", href: "/profile" },
   ];
+  const createLink = { name: "Create", href: "/create" };
   const niches = [
-    { name: "Writers", href: "/writers" },
-    { name: "Visual Art", href: "/visual-art" },
-    { name: "Design", href: "/design" },
-    { name: "Music", href: "/music" },
-    { name: "Video", href: "/video" },
+    { name: "Writing", href: "/niches/writing" },
+    { name: "Photography", href: "/niches/photography" },
+    { name: "Art", href: "/niches/art" },
+    { name: "Design", href: "/niches/design" },
   ];
 
   const handleNicheClick = (e: React.MouseEvent, href: string) => {
@@ -64,6 +64,14 @@ const Navigation = () => {
               {link.name}
             </a>
           ))}
+        {user && (
+          <Link
+            href={createLink.href}
+            className="bg-blue-600 text-white hover:bg-blue-700 transition-colors font-sora p-2.5 rounded-lg"
+          >
+            {createLink.name}
+          </Link>
+        )}
         {!loading &&
           (user ? (
             <button
@@ -138,12 +146,19 @@ const Navigation = () => {
                     <a
                       key={link.href}
                       href={link.href}
-                      className="block font-sora"
+                      className="block font-sora text-gray-300"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {link.name}
                     </a>
                   ))}
+                  <Link
+                    href={createLink.href}
+                    className="block font-sora bg-blue-600 text-white p-2.5 rounded-lg hover:bg-blue-700"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {createLink.name}
+                  </Link>
                 </div>
               )}
               <div className="space-y-4">
@@ -155,7 +170,7 @@ const Navigation = () => {
                         await supabase.auth.signOut();
                         setIsMenuOpen(false);
                       }}
-                      className="block font-sora text-left"
+                      className="block font-sora text-left bg-black/50 p-2.5 rounded-xl w-full text-white"
                     >
                       Logout
                     </button>
@@ -170,7 +185,7 @@ const Navigation = () => {
                       </Link>
                       <Link
                         href="/auth?form=signup"
-                        className="block font-sora"
+                        className="block font-sora text-gray-300"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Create Account
@@ -192,7 +207,7 @@ const Navigation = () => {
                       handleNicheClick(e, niche.href);
                       setIsMenuOpen(false);
                     }}
-                    className="block font-sora"
+                    className="block font-sora text-gray-300"
                   >
                     {niche.name}
                   </a>
