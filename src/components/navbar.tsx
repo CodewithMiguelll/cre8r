@@ -67,7 +67,7 @@ const Navigation = () => {
         {user && (
           <Link
             href={createLink.href}
-            className="bg-blue-600 text-white hover:bg-blue-700 transition-colors font-sora p-2.5 rounded-lg"
+            className=" text-black hover:text-white hover:bg-black transition-colors font-sora p-2 rounded-lg  border-2 border-black"
           >
             {createLink.name}
           </Link>
@@ -79,7 +79,7 @@ const Navigation = () => {
                 const supabase = createClient;
                 await supabase.auth.signOut();
               }}
-              className="bg-black text-white hover:opacity-70 transition-opacity font-sora p-2.5 rounded-lg"
+              className="bg-red-600 text-white hover:opacity-70 transition-opacity font-sora p-2.5 rounded-lg hover:cursor-pointer"
             >
               Logout
             </button>
