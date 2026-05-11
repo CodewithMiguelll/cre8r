@@ -15,18 +15,27 @@ export async function middleware(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet: any[]) {
-          cookiesToSet.forEach(({ name, value }: { name: string; value: string }) =>
-            request.cookies.set(name, value),
+          cookiesToSet.forEach(
+            ({ name, value }: { name: string; value: string }) =>
+              request.cookies.set(name, value),
           );
           supabaseResponse = NextResponse.next({
             request,
           });
-          cookiesToSet.forEach(({ name, value, options }: { name: string; value: string; options?: any }) =>
-            supabaseResponse.cookies.set(name, value, options),
+          cookiesToSet.forEach(
+            ({
+              name,
+              value,
+              options,
+            }: {
+              name: string;
+              value: string;
+              options?: any;
+            }) => supabaseResponse.cookies.set(name, value, options),
           );
         },
       },
-    }
+    },
   );
 
   // IMPORTANT: Avoid writing any logic between createServerClient and
@@ -36,6 +45,36 @@ export async function middleware(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // Routes that don't require profile completion
+  const publicRoutes = [
+    "/auth/login",
+    "/auth/signup",
+    "/profile-setup",
+    "/about",
+  ];
+  const isPublicRoute = publicRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route),
+  );
+
+  // If user is authenticated and not on a public route, check if profile is completed
+  if (user && !isPublicRoute) {
+    try {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("profile_completed")
+        .eq("id", user.id)
+        .single();
+
+      if (profile && !profile.profile_completed) {
+        // Redirect to profile setup if not completed
+        return NextResponse.redirect(new URL("/profile-setup", request.url));
+      }
+    } catch (error) {
+      // If there's an error fetching profile, let the request continue
+      // The app-level auth checks will handle it
+    }
+  }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
   // creating a new response object with NextResponse.next() make sure to:

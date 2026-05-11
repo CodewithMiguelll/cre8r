@@ -3,9 +3,14 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
   email TEXT,
   full_name TEXT,
+  username TEXT UNIQUE,
   avatar_url TEXT,
   bio TEXT,
+  location TEXT,
   website TEXT,
+  portfolio_links TEXT[],
+  creative_interests TEXT[],
+  profile_completed BOOLEAN DEFAULT false,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );

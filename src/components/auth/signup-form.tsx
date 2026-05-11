@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 
 export function SignupForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,13 +18,16 @@ export function SignupForm() {
     setMessage("");
 
     const supabase = createClient;
-    const { error } = await supabase.auth.signUp({
+    const { error, data } = await supabase.auth.signUp({
       email,
       password,
     });
 
     if (error) {
       setMessage(error.message);
+    } else if (data.user) {
+      // Redirect to profile setup
+      router.push("/profile-setup");
     } else {
       setMessage("Check your email for the confirmation link!");
     }
@@ -61,7 +66,7 @@ export function SignupForm() {
       <Button type="submit" disabled={loading}>
         {loading ? "Signing up..." : "Sign Up"}
       </Button>
-      {message && <p className="text-sm text-green-600">{message}</p>}
+      {message && <p className="text-sm text-red-600">{message}</p>}
     </form>
   );
 }
