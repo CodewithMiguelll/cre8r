@@ -4,9 +4,14 @@ export interface Profile {
   id: string;
   email: string;
   full_name: string | null;
+  username: string | null;
   avatar_url: string | null;
   bio: string | null;
+  location: string | null;
   website: string | null;
+  portfolio_links: string[] | null;
+  creative_interests: string[] | null;
+  profile_completed: boolean;
   created_at: string;
   updated_at: string;
 }
