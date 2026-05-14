@@ -6,7 +6,7 @@ import { useUser } from "@/lib/use-user";
 import { CreatePageClient } from "./_components/create-page-client";
 
 export default function CreatePage() {
-  const { user, isLoading } = useUser();
+  const { user, loading } = useUser();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function CreatePage() {
 
   if (!isMounted) return null;
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
