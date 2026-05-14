@@ -4,7 +4,7 @@ import { PieceLike } from "@/lib/types";
 
 export function usePieceLikes(pieceId: string, userId?: string) {
   const queryClient = useQueryClient();
-  const supabase = createClient();
+  const supabase = createClient;
 
   const { data: likes = [], isLoading } = useQuery({
     queryKey: ["piece_likes", pieceId],

@@ -6,7 +6,7 @@ export function useNicheCategories(niche: Niche) {
   return useQuery({
     queryKey: ["niche_categories", niche],
     queryFn: async () => {
-      const supabase = createClient();
+      const supabase = createClient;
 
       const { data, error } = await supabase
         .from("niche_categories")

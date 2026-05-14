@@ -4,7 +4,7 @@ import { PieceCommentWithAuthor } from "@/lib/types";
 
 export function usePieceComments(pieceId: string) {
   const queryClient = useQueryClient();
-  const supabase = createClient();
+  const supabase = createClient;
 
   const { data: comments = [], isLoading } = useQuery({
     queryKey: ["piece_comments", pieceId],

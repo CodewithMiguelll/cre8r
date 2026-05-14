@@ -6,7 +6,7 @@ export function usePieces(niche: Niche, category?: string) {
   return useQuery({
     queryKey: ["pieces", niche, category],
     queryFn: async () => {
-      const supabase = createClient();
+      const supabase = createClient;
 
       let query = supabase
         .from("pieces")
@@ -36,7 +36,7 @@ export function usePiecesByUser(userId: string) {
   return useQuery({
     queryKey: ["pieces", "user", userId],
     queryFn: async () => {
-      const supabase = createClient();
+      const supabase = createClient;
 
       const { data, error } = await supabase
         .from("pieces")
@@ -57,7 +57,7 @@ export function usePiecesByUser(userId: string) {
 }
 
 export async function fetchPieceDetail(pieceId: string) {
-  const supabase = createClient();
+  const supabase = createClient;
 
   const { data, error } = await supabase
     .from("pieces")
@@ -77,7 +77,7 @@ export async function fetchPieceDetail(pieceId: string) {
 }
 
 export async function incrementViewCount(pieceId: string) {
-  const supabase = createClient();
+  const supabase = createClient;
 
   const { data, error } = await supabase.rpc("increment_piece_views", {
     piece_id: pieceId,
