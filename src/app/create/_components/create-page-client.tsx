@@ -179,7 +179,7 @@ export function CreatePageClient() {
             <button
               type="submit"
               disabled={uploading || !formData.files.length || !formData.title}
-              className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-colors"
+              className="px-8 py-3 bg-black text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-colors"
             >
               {uploading ? "Uploading..." : "Create & Publish"}
             </button>
