@@ -4,11 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { completeProfileSetup } from "@/lib/profile-actions";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/lib/use-user";
 
 const CREATIVE_INTERESTS = ["writing", "photography", "music", "art", "design"];
 
 export function ProfileSetupForm() {
   const router = useRouter();
+  const { user, loading: userLoading } = useUser();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -95,6 +97,36 @@ export function ProfileSetupForm() {
       router.push("/explore");
     }
   };
+
+  // Show loading state while checking authentication
+  if (userLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="animate-pulse space-y-4">
+          <div className="h-10 bg-gray-200 rounded"></div>
+          <div className="h-10 bg-gray-200 rounded"></div>
+          <div className="h-20 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error if user is not authenticated
+  if (!user) {
+    return (
+      <div className="space-y-4">
+        <div className="rounded-md bg-red-50 p-4">
+          <p className="text-sm text-red-800 font-medium">Not authenticated</p>
+          <p className="text-sm text-red-700 mt-2">
+            You need to be logged in to complete your profile setup.
+          </p>
+        </div>
+        <Button onClick={() => router.push("/auth/signup")} className="w-full">
+          Go to Sign Up
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

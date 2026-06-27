@@ -17,21 +17,35 @@ export function SignupForm() {
     setLoading(true);
     setMessage("");
 
-    const supabase = createClient;
-    const { error, data } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    try {
+      const supabase = createClient;
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
 
-    if (error) {
-      setMessage(error.message);
-    } else if (data.user) {
-      // Redirect to profile setup
-      router.push("/profile-setup");
-    } else {
-      setMessage("Check your email for the confirmation link!");
+      if (error) {
+        setMessage(error.message);
+      } else if (data?.session || data?.user) {
+        const { data: sessionData } = await supabase.auth.getSession();
+
+        if (sessionData.session) {
+          router.refresh();
+          router.push("/profile-setup");
+          return;
+        }
+
+        setMessage(
+          "Check your email for the confirmation link! You may need to confirm your email before setting up your profile.",
+        );
+      } else {
+        setMessage("Check your email for the confirmation link!");
+      }
+    } catch (error) {
+      setMessage("An error occurred while signing up. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (

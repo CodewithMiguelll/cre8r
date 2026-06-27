@@ -1,17 +1,24 @@
 "use client";
 
-import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useUser } from "@/lib/use-user";
 import { CreatePageClient } from "./_components/create-page-client";
 
 export default function CreatePage() {
+  const router = useRouter();
   const { user, loading } = useUser();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/auth/login?next=/create");
+    }
+  }, [loading, user, router]);
 
   if (!isMounted) return null;
 
@@ -27,7 +34,7 @@ export default function CreatePage() {
   }
 
   if (!user) {
-    redirect("/auth/login?next=/create");
+    return null;
   }
 
   return <CreatePageClient />;

@@ -78,6 +78,8 @@ const Navigation = () => {
               onClick={async () => {
                 const supabase = createClient;
                 await supabase.auth.signOut();
+                router.push("/");
+                router.refresh();
               }}
               className="bg-red-600 text-white hover:opacity-70 transition-opacity font-sora p-2.5 rounded-lg hover:cursor-pointer"
             >
@@ -169,6 +171,8 @@ const Navigation = () => {
                         const supabase = createClient;
                         await supabase.auth.signOut();
                         setIsMenuOpen(false);
+                        router.push("/");
+                        router.refresh();
                       }}
                       className="block font-sora text-left bg-black/50 p-2.5 rounded-xl w-full text-white"
                     >
