@@ -22,7 +22,11 @@ export async function completeProfileSetup(data: {
             return cookieStore.getAll();
           },
           setAll(
-            cookiesToSet: Array<{ name: string; value: string; options?: any }>,
+            cookiesToSet: Array<{
+              name: string;
+              value: string;
+              options?: { [key: string]: unknown };
+            }>,
           ) {
             cookiesToSet.forEach(({ name, value, options }) => {
               cookieStore.set(name, value, options);
@@ -52,7 +56,6 @@ export async function completeProfileSetup(data: {
         location: data.location,
         portfolio_links: data.portfolio_links.filter((link) => link.trim()),
         creative_interests: data.creative_interests,
-        profile_completed: true,
         updated_at: new Date().toISOString(),
       })
       .eq("id", user.id);

@@ -11,7 +11,7 @@ export interface Profile {
   website: string | null;
   portfolio_links: string[] | null;
   creative_interests: string[] | null;
-  profile_completed: boolean;
+  profile_completed?: boolean;
   created_at: string;
   updated_at: string;
 }

@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { useUser } from "@/lib/use-user";
 import { createClient } from "@/lib/supabase";
 import ProfileHeader from "@/components/profile/profile-header";
@@ -19,13 +18,8 @@ interface Profile {
   created_at: string;
 }
 
-interface ProfileParams {
-  userId?: string;
-}
-
 export default function ProfilePage() {
-  const router = useRouter();
-  const { user: currentUser } = useUser();
+  const { user: currentUser, loading: isAuthLoading } = useUser();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,16 +39,29 @@ export default function ProfilePage() {
 
   const profileUserId = getProfileUserId();
 
-  useEffect(() => {
-    if (!profileUserId) {
-      setIsLoading(false);
-      return;
+  const getProfileErrorMessage = useCallback((err: unknown) => {
+    if (err instanceof Error && err.message) {
+      return err.message;
     }
 
-    fetchProfile();
-  }, [profileUserId, currentUser?.id]);
+    if (typeof err === "object" && err !== null) {
+      const maybeError = err as {
+        message?: string;
+        details?: string;
+        hint?: string;
+        code?: string;
+      };
 
-  const fetchProfile = async () => {
+      if (maybeError.message) return maybeError.message;
+      if (maybeError.details) return maybeError.details;
+      if (maybeError.hint) return maybeError.hint;
+      if (maybeError.code) return `Supabase error: ${maybeError.code}`;
+    }
+
+    return "Failed to load profile";
+  }, []);
+
+  const fetchProfile = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -63,30 +70,90 @@ export default function ProfilePage() {
         .from("profiles")
         .select("*")
         .eq("id", profileUserId)
-        .single();
+        .maybeSingle();
 
       if (fetchError) throw fetchError;
 
-      setProfile(data);
+      if (!data) {
+        if (profileUserId === currentUser?.id) {
+          const { data: createdProfile, error: createError } =
+            await createClient
+              .from("profiles")
+              .insert({
+                id: profileUserId,
+                email: currentUser?.email ?? "",
+                full_name: currentUser?.user_metadata?.full_name ?? null,
+                username: currentUser?.user_metadata?.username ?? null,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              })
+              .select("*")
+              .single();
+
+          if (createError) throw createError;
+
+          setProfile(createdProfile as Profile);
+          setIsOwnProfile(true);
+          setFollowers(0);
+          setFollowing(0);
+          return;
+        }
+
+        setError("Profile not found");
+        return;
+      }
+
+      setProfile(data as Profile);
       setIsOwnProfile(profileUserId === currentUser?.id);
 
       // TODO: Fetch actual follower counts from a followers table
       setFollowers(0);
       setFollowing(0);
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Failed to load profile";
+      const message = getProfileErrorMessage(err);
       setError(message);
-      console.error("Error fetching profile:", err);
+      console.error("Error fetching profile:", {
+        err,
+        profileUserId,
+        currentUserId: currentUser?.id,
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [
+    currentUser?.email,
+    currentUser?.id,
+    currentUser?.user_metadata?.full_name,
+    currentUser?.user_metadata?.username,
+    getProfileErrorMessage,
+    profileUserId,
+  ]);
+
+  useEffect(() => {
+    if (!profileUserId) {
+      setIsLoading(false);
+      return;
+    }
+
+    fetchProfile();
+  }, [fetchProfile, profileUserId]);
 
   const handleProfileUpdate = (updatedProfile: Profile) => {
     setProfile(updatedProfile);
     setIsEditing(false);
   };
+
+  if (isAuthLoading) {
+    return (
+      <div className="min-h-screen bg-background p-4 md:p-8">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <Skeleton className="h-48 w-48 rounded-full mx-auto" />
+          <Skeleton className="h-20 w-full" />
+          <Skeleton className="h-64 w-full" />
+        </div>
+      </div>
+    );
+  }
 
   if (!currentUser) {
     return (
