@@ -95,13 +95,13 @@ const items = [
   {
     id: "1",
     img: "/images/adura-flames-touching.jpg",
-    url: "https://example.com/one",
+    url: "https://x.com/AduraTheArtist",
     height: 400,
   },
   {
     id: "2",
     img: "/images/adura-hair-chains.jpg",
-    url: "https://example.com/two",
+    url: "https://x.com/AduraTheArtist",
     height: 350,
   },
   {
@@ -118,6 +118,24 @@ const items = [
   },
   {
     id: "5",
+    img: "/images/rotr-book-cover-cinematic-variant-2.jpg",
+    url: "https://www.wattpad.com/story/407399764?utm_source=android&utm_medium=link&utm_content=share_writing&wp_page=create&wp_uname=Chikaimaaa_",
+    height: 800,
+  },
+  {
+    id: "6",
+    img: "/images/rotr-book-cover-cinematic-variant-2.jpg",
+    url: "https://www.wattpad.com/story/407399764?utm_source=android&utm_medium=link&utm_content=share_writing&wp_page=create&wp_uname=Chikaimaaa_",
+    height: 800,
+  },
+  {
+    id: "7",
+    img: "/images/rotr-book-cover-cinematic-variant-2.jpg",
+    url: "https://www.wattpad.com/story/407399764?utm_source=android&utm_medium=link&utm_content=share_writing&wp_page=create&wp_uname=Chikaimaaa_",
+    height: 800,
+  },
+  {
+    id: "8",
     img: "/images/rotr-book-cover-cinematic-variant-2.jpg",
     url: "https://www.wattpad.com/story/407399764?utm_source=android&utm_medium=link&utm_content=share_writing&wp_page=create&wp_uname=Chikaimaaa_",
     height: 800,
