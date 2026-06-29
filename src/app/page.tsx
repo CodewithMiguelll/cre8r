@@ -124,21 +124,33 @@ const items = [
   },
   {
     id: "6",
-    img: "/images/rotr-book-cover-cinematic-variant-2.jpg",
-    url: "https://www.wattpad.com/story/407399764?utm_source=android&utm_medium=link&utm_content=share_writing&wp_page=create&wp_uname=Chikaimaaa_",
+    img: "/images/mike-ro-abs-gl.jpg",
+    url: "https://x.com/mikerodraws",
     height: 800,
   },
   {
     id: "7",
-    img: "/images/rotr-book-cover-cinematic-variant-2.jpg",
-    url: "https://www.wattpad.com/story/407399764?utm_source=android&utm_medium=link&utm_content=share_writing&wp_page=create&wp_uname=Chikaimaaa_",
+    img: "/images/mike-ro-abs-batman-drawing.jpg",
+    url: "https://x.com/mikerodraws",
     height: 800,
   },
   {
     id: "8",
-    img: "/images/rotr-book-cover-cinematic-variant-2.jpg",
-    url: "https://www.wattpad.com/story/407399764?utm_source=android&utm_medium=link&utm_content=share_writing&wp_page=create&wp_uname=Chikaimaaa_",
+    img: "/images/mike-ro-supergirl-sketch.jpg",
+    url: "https://x.com/mikerodraws",
     height: 800,
+  },
+  {
+    id: "9",
+    img: "/images/carino-mockup.png",
+    url: "https://Chikaimaaa",
+    height: 600,
+  },
+  {
+    id: "10",
+    img: "/images/adrian-design-logo.png",
+    url: "https://x.com/Chikaimaaa",
+    height: 400,
   },
 ];
 
