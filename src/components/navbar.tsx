@@ -28,7 +28,7 @@ const Navigation = () => {
   const handleNicheClick = (e: React.MouseEvent, href: string) => {
     if (!user) {
       e.preventDefault();
-      router.push("/auth");
+      router.push(`/auth/login?next=${encodeURIComponent(href)}`);
     } else {
       router.push(href);
     }
@@ -88,13 +88,13 @@ const Navigation = () => {
           ) : (
             <>
               <Link
-                href="/auth?form=login"
+                href="/auth/login"
                 className="hover:opacity-70 transition-opacity font-sora bg-black p-2.5 text-white rounded-lg"
               >
                 Sign In
               </Link>
               <Link
-                href="/auth?form=signup"
+                href="/auth/signup"
                 className="hover:opacity-70 transition-opacity font-sora p-2 rounded-lg border border-black"
               >
                 Create Account
@@ -181,14 +181,14 @@ const Navigation = () => {
                   ) : (
                     <>
                       <Link
-                        href="/auth?form=login"
+                        href="/auth/login"
                         className="block font-sora bg-black p-2.5 text-white rounded-xl"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Sign In
                       </Link>
                       <Link
-                        href="/auth?form=signup"
+                        href="/auth/signup"
                         className="block font-sora text-gray-300"
                         onClick={() => setIsMenuOpen(false)}
                       >

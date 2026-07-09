@@ -1,28 +1,21 @@
-import Link from "next/link";
 import { SignupForm } from "@/components/auth/signup-form";
-import { Button } from "@/components/ui/button";
 
-export default function SignupPage() {
+interface SignupPageProps {
+  searchParams?: {
+    next?: string;
+  };
+}
+
+export default function SignupPage({ searchParams }: SignupPageProps) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your Cre8r account
-          </h2>
-        </div>
-        <SignupForm />
-        <div className="flex flex-col space-y-3">
-          <p className="text-center text-sm text-gray-600">
-            Already have an account?
-          </p>
-          <Link href="/auth/login" className="w-full">
-            <Button variant="outline" className="w-full">
-              Log In
-            </Button>
-          </Link>
-        </div>
+    <main className="min-h-screen flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-lg">
+        <h1 className="text-3xl font-semibold mb-2">Create Account</h1>
+        <p className="text-sm text-gray-600 mb-8">
+          Start your Cre8r journey with a new account.
+        </p>
+        <SignupForm redirectTo={searchParams?.next ?? "/profile-setup"} />
       </div>
-    </div>
+    </main>
   );
 }

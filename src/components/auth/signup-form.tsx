@@ -1,16 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 
-export function SignupForm() {
+interface SignupFormProps {
+  redirectTo?: string;
+}
+
+export function SignupForm({ redirectTo = "/profile-setup" }: SignupFormProps) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const supabase = useMemo(() => createClient, []);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +23,6 @@ export function SignupForm() {
     setMessage("");
 
     try {
-      const supabase = createClient;
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -26,23 +30,20 @@ export function SignupForm() {
 
       if (error) {
         setMessage(error.message);
-      } else if (data?.session || data?.user) {
-        const { data: sessionData } = await supabase.auth.getSession();
-
-        if (sessionData.session) {
-          router.refresh();
-          router.push("/profile-setup");
-          return;
-        }
-
-        setMessage(
-          "Check your email for the confirmation link! You may need to confirm your email before setting up your profile.",
-        );
-      } else {
-        setMessage("Check your email for the confirmation link!");
+        return;
       }
-    } catch (error) {
-      setMessage("An error occurred while signing up. Please try again.");
+
+      if (data?.session) {
+        router.refresh();
+        router.push(redirectTo);
+        return;
+      }
+
+      setMessage(
+        "Check your email for the confirmation link before continuing. If you already confirmed your email, you can sign in and finish setup.",
+      );
+    } catch {
+      setMessage("We could not create your account right now. Please try again.");
     } finally {
       setLoading(false);
     }

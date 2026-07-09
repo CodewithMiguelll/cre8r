@@ -1,16 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 
-export function LoginForm() {
+interface LoginFormProps {
+  redirectTo?: string;
+}
+
+export function LoginForm({ redirectTo = "/explore" }: LoginFormProps) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const supabase = useMemo(() => createClient, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,7 +23,6 @@ export function LoginForm() {
     setMessage("");
 
     try {
-      const supabase = createClient;
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -27,15 +31,19 @@ export function LoginForm() {
       if (error) {
         setMessage(error.message);
         setLoading(false);
-      } else if (data?.session || data?.user) {
-        router.refresh();
-        router.push("/explore");
-      } else {
-        setMessage("Login failed. Please try again.");
-        setLoading(false);
+        return;
       }
-    } catch (error) {
-      setMessage("An error occurred during login. Please try again.");
+
+      if (data?.session || data?.user) {
+        router.refresh();
+        router.push(redirectTo);
+        return;
+      }
+
+      setMessage("Login failed. Please try again.");
+    } catch {
+      setMessage("We could not sign you in right now. Please try again.");
+    } finally {
       setLoading(false);
     }
   };
