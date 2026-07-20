@@ -175,6 +175,8 @@ export default function Home() {
     },
   };
 
+  const viewportOnce = { once: true };
+
   return (
     <>
       {/* HERO SECTION */}
@@ -184,6 +186,7 @@ export default function Home() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
+          viewport={viewportOnce}
         >
           <motion.h1
             className="text-5xl md:text-8xl font-playfair tracking-tight font-bold text-center leading-tight"
@@ -222,6 +225,7 @@ export default function Home() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
+          viewport={viewportOnce}
         >
           <motion.h2
             className="text-4xl md:text-7xl lg:text-7xl font-playfair font-bold text-center leading-tight"
@@ -272,6 +276,7 @@ export default function Home() {
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
+            viewport={viewportOnce}
           >
             {stats.map((stat) => {
               const IconComponent = stat.icon;
@@ -304,6 +309,7 @@ export default function Home() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
+          viewport={viewportOnce}
         >
           <motion.h2
             className="text-4xl md:text-6xl font-playfair font-bold text-center leading-tight"
@@ -398,6 +404,7 @@ export default function Home() {
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
+            viewport={viewportOnce}
           >
             <motion.h2
               className="text-4xl md:text-6xl font-playfair font-bold mb-6"
@@ -419,6 +426,7 @@ export default function Home() {
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
+            viewport={viewportOnce}
           >
             {howItWorks.map((step) => (
               <motion.div
@@ -453,6 +461,7 @@ export default function Home() {
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
+            viewport={viewportOnce}
           >
             <motion.h2
               className="text-4xl md:text-6xl font-playfair font-bold mb-6"
@@ -491,6 +500,7 @@ export default function Home() {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
+          viewport={viewportOnce}
         >
           <motion.h2
             className="text-4xl md:text-7xl font-playfair font-bold leading-tight"
