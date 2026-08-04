@@ -10,6 +10,7 @@ interface SignupFormProps {
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+const defaultCallbackPath = "/auth/callback";
 
 export function SignupForm({ redirectTo = "/profile-setup" }: SignupFormProps) {
   const router = useRouter();
@@ -25,7 +26,9 @@ export function SignupForm({ redirectTo = "/profile-setup" }: SignupFormProps) {
   const getRedirectUrl = () => {
     const origin =
       typeof window !== "undefined" ? window.location.origin : (baseUrl ?? "");
-    return `${origin}${redirectTo}`;
+    const callbackUrl = new URL(defaultCallbackPath, origin);
+    callbackUrl.searchParams.set("next", redirectTo);
+    return callbackUrl.toString();
   };
 
   const handleSignup = async (e: React.FormEvent) => {
